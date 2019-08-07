@@ -109,6 +109,14 @@ const mapDispatchToProps = {
 ##### 参考地址
 [https://imweb.io/topic/5a426d32a192c3b460fce354](https://imweb.io/topic/5a426d32a192c3b460fce354)
 
-### antd CheckBox Bug
+### antd 
+#### CheckBox 
 + 描述： form.resetFields时，不能重置checkbox
 + 解决办法：在getFieldDecorator(key, options)的options里添加{valuePropName: 'checked'}
+
+#### rangePicker
++ 默认时间不显示
++ 解决办法：用initialValue而不是defaultValue更不是defaultPickerValue
+
+#### 小常识
+被form.create()包裹的组件，当form控件的的值方式变化的时候，会触发自定义组件的rerender。
