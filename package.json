@@ -3,11 +3,19 @@
   "version": "0.0.0",
   "private": true,
   "hexo": {
+<<<<<<< HEAD
     "version": "3.9.0"
   },
   "dependencies": {
     "cnpm": "^5.1.1",
     "hexo": "^3.9.0",
+=======
+    "version": "3.4.4"
+  },
+  "dependencies": {
+    "cnpm": "^5.1.1",
+    "hexo": "^3.2.0",
+>>>>>>> 8695504697f489d8cb114d89c814545b6cc6d696
     "hexo-deployer-git": "^0.3.1",
     "hexo-generator-archive": "^0.1.4",
     "hexo-generator-category": "^0.1.3",

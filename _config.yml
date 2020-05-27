@@ -12,7 +12,7 @@ timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://xuyonglin222.github.io
+url: http://yoursite.com
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -87,6 +87,10 @@ passage_end_tag:
 deploy:
   type: git
 
+<<<<<<< HEAD
   repo: https://xuyonglin222@github.com/xuyonglin222/xuyonglin222.github.io.git
+=======
+  repo: https://xuyonglin222:15713708661asdfg@github.com/xuyonglin222/xuyonglin222.github.io.git
+>>>>>>> 8695504697f489d8cb114d89c814545b6cc6d696
 
   branch: master
