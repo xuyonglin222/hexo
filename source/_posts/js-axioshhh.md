@@ -268,4 +268,110 @@ axios({
 原来浏览器在发送delete请求时，会先发送一个options请求询问服务器是否允许浏览器以此方法、接口访问服务器，如果允许，浏览器会发送真实的delete请求。
 之所以报405，是因为后台的Acess-Control-Allow-Methods里没有OPTIONS，所以就报了个405。
 
-#### 简单请求
+### 封装
+
+```bash
+import axios from 'axios';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
+import { notification, Modal } from 'antd';
+
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+axios.interceptors.request.use(
+    config => {
+        config.headers.common.TaskId = +new Date() + '-' + String(Math.random()).slice(2);
+       
+        return {
+            timeout: 100,
+            ...config
+        };
+    },
+    error => {
+        NProgress.done();
+        console.log('request', error);
+        return Promise.reject(error);
+    }
+);
+
+axios.interceptors.response.use(
+    res => {
+        const { url } = res.config;
+
+        NProgress.done();
+        const { data } = res;
+
+        if (data && `${data.errno}` !== '0') {
+            switch (data.errno) {
+                case 301: {
+                    data.data.logoutURL &&
+                        (window.location.href = data.data.logoutURL.replace(
+                            '${jumpto}',
+                            encodeURIComponent(window.location.href)
+                        ));
+                    return Promise.reject(res);
+                }
+                case 5000: {
+                    // 5000 ： 业务接口正常，需要告警提示
+                    notification.warning({
+                        message: '警告',
+                        description: data.errmsg || '未知警告',
+                        duration: 10
+                    });
+                    // 正常数据逻辑
+                    res.data.errno = 0;
+                    break;
+                }
+                case 1066: {
+                    // 系统上线提示
+                    const { errmsg } = data;
+                    const { title, content } = data.data;
+                    Modal.warning({
+                        centered: true,
+                        title,
+                        content: <p>{content || errmsg}</p>
+                    });
+                    break;
+                }
+                default: {
+                    notification.error({
+                        message: data.errtitle || '接口异常',
+                        description: (
+                            <Fragment>
+                                <div>接口地址：{url}</div>
+                                <div>错误信息：{data.errmsg || '未知异常'}</div>
+                            </Fragment>
+                        )
+                    });
+                    return Promise.reject(res);
+                }
+            }
+        }
+        return res;
+    },
+    function(error) {
+        if (error.cancel !== true) {
+            NProgress.done();
+        }
+        console.log('response', error);
+        notification.error({
+            message: `${error.config.url}：请求发生错误`,
+            description: `${error.message}\n ${error.stack} `
+        });
+        return Promise.reject(error);
+    }
+);
+
+export function get(url, data = {}, options = {}) {
+    return axios
+        .get(url, {
+            params: data,
+            ...options
+        })
+        .then(res => res.data);
+}
+
+export function post(url, data = {}, options = {}) {
+    return axios.post(url, data, options).then(res => res.data);
+}
+
+```
