@@ -87,10 +87,6 @@ passage_end_tag:
 deploy:
   type: git
 
-<<<<<<< HEAD
-  repo: https://xuyonglin222@github.com/xuyonglin222/xuyonglin222.github.io.git
-=======
   repo: https://xuyonglin222:15713708661asdfg@github.com/xuyonglin222/xuyonglin222.github.io.git
->>>>>>> 8695504697f489d8cb114d89c814545b6cc6d696
 
   branch: master
