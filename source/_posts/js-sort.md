@@ -184,32 +184,21 @@ function merge(left, right)
 ```bash
 var arr = [12,3,23,5,17,9,15,46];
 
-function quickSort(arr,left, right){
-  var i,j,t,temp;
-  if(left>right){
-    return;
-  }
-  i = left;
-  j = right;
-  temp = arr[left];
-
-  while(i!==j){
-    while(temp<=arr[j]&&i<j){
-      j--;
+function quickSort(arr){
+    if(arr.length <= 1) return arr;
+    let pivotIndex = Math.floor(arr.length / 2);
+    let left  = [];
+    let right = [];
+    var pivot = arr.splice(pivotIndex, 1)[0];
+    for(let i = 0; i < arr.length;i++){
+        if(arr[i] < pivot){
+            left.push(arr[i])
+        }else {
+            right.push(arr[i])
+        }
     }
-    while(temp>=arr[i]&&i<j){
-      i++
-    }
-    if(i<j){
-      [arr[j], arr[i]] = [arr[i], arr[j]];
-    }
-  }
-  arr[left] = arr[i];
-  arr[i] = temp;
-  quickSort(arr,left,i-1);
-  quickSort(arr,i+1,right);
+    return quickSort(left).concat(pivot,quickSort(right));
 }
-quickSort(arr,0, arr.length-1);
 console.log(arr);
 ```
 #### 算法分析

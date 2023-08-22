@@ -1,0 +1,133 @@
+### 手写系列
+
+```
+function debounce(fn, delay, immediate = false) {
+    let timer = null;
+    //代码规范 我们最好不要修改 用户传递进来的参数
+    //所以我们在下面声明了一个变量 用于控制
+    let isInvoke = false;
+    const _debounce = function (...args) {
+        if (timer) clearTimeout(timer);
+        //如果immdiate为true
+        //isInvoke取反为true
+        if (immediate && !isInvoke) {
+            //会立马执行一次
+            fn.apply(this, args);
+            //同时将isInvoke设置为true,防止下次触发的时候 又再次触发立即执行
+            isInvoke = true;
+        } else {
+            //第一次触发结束立即执行后
+            //isInvoke会限定在定时器中 输入结束后 才会重新刷新isInvoke
+            timer = setTimeout(() => {
+                //剩下的操作在规定时间内 会等待定时器结束
+                fn.apply(this, args);
+                //同时重新刷新inInvoke
+                isInvoke = false;
+            }, delay)
+        }
+    }
+    return _debounce;
+}
+
+
+function myNew(fn,...args) {
+    const obj = Object.create(null)
+    obj.__proto__ = fn.prototype
+    const result = fn.apply(obj, args)
+    const isObject = typeof result === 'object' && result !== null 
+    const isFunction = typeof result === 'function'
+    if(isObject || isFunction) return result
+    return obj
+}
+
+Function.prototype.myCall = function(context,...args) {
+    if(typeof this!=='function') {
+        throw new TypeError('not function')
+    } 
+    context = context || window
+    context.fn = this
+    const result = context.fn(...args)
+    delete context.fn
+    return result
+}
+
+Function.prototype.myApply = function(context,args) {
+    if(typeof this!=='function') {
+        throw new TypeError('not function')
+    } 
+    context = context || window
+    context.fn = this
+    const result = context.fn(...args)
+    delete context.fn
+    return result
+}
+
+Function.prototype.myBind = function() {
+    if (typeof this !== 'function') {
+      throw new TypeError('not function');
+    }
+    var slice = Array.prototype.slice;
+    var thatFunc = this, // function p
+    thatArg = arguments[0]; // 获取传入的对象也就是上下文
+    var args = slice.call(arguments, 1); // 获取传入的参数
+    return function(){
+      var funcArgs = args.concat(slice.call(arguments)) // 合并参数
+      return thatFunc.apply(thatArg, funcArgs);  // 使用apply进行调用
+    };
+};
+
+ function myInstanceof(left, right) {
+    let leftValue = left.__proto__
+    let rightValue = right.prototype
+    while(leftValue) {
+      if(leftValue===rightValue) {
+        return true
+      }
+      leftValue = leftValue.__proto__
+    }
+    return false
+  }
+
+   function promiseAll(promsies) {
+    return new Promise((resolve, reject)=> {
+      if(!Array.isArray(promsies)) {
+        throw new Error('not Array')
+      }
+      let len = promsies.length
+      let count = 0
+      let result = []
+      for(let i=0;i<len;i++) {
+        Promise.resolve(promsies[i]).then(data=> {
+          result.push(data)
+          count++
+          if(count===len) {
+            return resolve(result)
+          }
+        }).catch(err=> {
+          return reject(err)
+        })
+      }
+    })
+  }
+    
+Promise.prototype.finally = function (cb) {
+  return this.then(function (value) {
+    return Promise.resolve(cb()).then(function () {
+      return value
+    })
+  }, function (err) {
+    return Promise.resolve(cb()).then(function () {
+      throw err
+    })
+  })
+}
+
+Promise.race = function (promises) {
+    return new Promise((resolve, reject) => {
+        for (let i = 0; i < promises.length; i++) {
+            Promise.resolve(promises[i]).then(resolve).catch(reject)
+        }
+    })
+}
+
+```
