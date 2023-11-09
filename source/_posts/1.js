@@ -1,44 +1,103 @@
-function compose(middleware){
-    if(!Array.isArray(middleware)){
-        throw new Error('must be array')
-    }
+var SyncLane =
 
-    for(let fn of middleware){
-        if(!(fn instanceof Function)){
-        throw new Error('must be a function')
+1;
+var InputContinuousHydrationLane =
+   
+2;
+var InputContinuousLane =
+            
+4;
+var DefaultHydrationLane =
+           
+8;
+var DefaultLane =
 
-        }
-    }
-    return function(context, next){
-        let index = -1;
+16;
+var TransitionHydrationLane =
+               
+32;
+var TransitionLanes =
 
-        return dispatch(0);
-        function dispatch(i){
-            if(i <= index) return Promise.reject(new Error('next just call once'));
-            index = i;
-            let fn = middleware[i]
-            if(i === middleware.length) fn = next;
-            return Promise.resolve(fn(context, dispatch.bind(null, i+1)))
-        }
-    }
-}
+4194240;
+var TransitionLane1 =
 
-function compose(middlewares){
+64;
+var TransitionLane2 =
 
-    return function(ctx, next){
-        let index = -1;
-        return dispatch(0);
-        function dispatch(i){
-            if(i<=index) return Promise.reject('just call once')
-            let fn  = middlewares[i];
-            index = i;
-            if(i===middlewares.length) fn = next;
-            try{
-                Promise.resolve(fn(ctx, dispatch.bind(null, i+1)));
-            }catch(e){
-                Promise.reject(e);
-            }
+128;
+var TransitionLane3 =
 
-        }
-    }
-}
+256;
+var TransitionLane4 =
+
+512;
+var TransitionLane5 =
+
+1024;
+var TransitionLane6 =
+
+2048;
+var TransitionLane7 =
+
+4096;
+var TransitionLane8 =
+
+8192;
+var TransitionLane9 =
+
+16384;
+var TransitionLane10 =
+
+32768;
+var TransitionLane11 =
+
+65536;
+var TransitionLane12 =
+
+131072;
+var TransitionLane13 =
+
+262144;
+var TransitionLane14 =
+
+524288;
+var TransitionLane15 =
+
+1048576;
+var TransitionLane16 =
+
+2097152;
+var RetryLanes =
+                           
+130023424;
+var RetryLane1 =
+                            
+4194304;
+var RetryLane2 =
+                            
+8388608;
+var RetryLane3 =
+                            
+16777216;
+var RetryLane4 =
+                            
+33554432;
+var RetryLane5 =
+                            
+67108864;
+var SomeRetryLane = RetryLane1;
+var SelectiveHydrationLane =
+         
+134217728;
+var NonIdleLanes =
+                         
+268435455;
+var IdleHydrationLane =
+              
+268435456;
+var IdleLane =
+
+536870912;
+var OffscreenLane =
+
+1073741824;
