@@ -232,12 +232,13 @@ module.exports = {
 
 设置 file-loader 或 url-loader 的 name， 使用 hash。
 
-### 在实际工程中，配置文件上百行乃是常事，如何保证各个 loader 按照预想方式工作？
+#### 在实际工程中，配置文件上百行乃是常事，如何保证各个 loader 按照预想方式工作？
 
 webpack 配置中，通过 module.rules 中的 enforce 字段，将 loader 分为 preLoader 、 postLoader 和 loader 三种，执行顺序为 pre -> loader -> inline -> post
 pre 代表在所有正常 loader 之前执行， post 是所有 loader 之后执行。（inline 官方不推荐使用）
 
-十八、代码分割的本质是什么？有什么意义？你是如何拆分的？
+#### 代码分割的本质是什么？有什么意义？你是如何拆分的？
+
 代码分割的本质其实是在 源代码直接上线 和 打包成唯一脚本 main.bundle.js 这两种极端方案之间的一种更适合实际场景的中间状态。
 用可接受的服务器性能压力增加来换取更好的用户体验。
 源代码直接上线：虽然过程可控，但是 http 请求多，性能开销大。
@@ -251,3 +252,8 @@ pre 代表在所有正常 loader 之前执行， post 是所有 loader 之后执
 如何拆分因项目而异，普遍适应的拆分原则：
 
 业务代码和第三方库分离打包，实现代码分割业务代码中的公共业务模块提取打包到一个模块首屏相关模块单独打包
+
+#### vite原理
+
++ 浏览器支持esm规范，vite利用浏览器对esm的支持，当import模块时，
++ 
