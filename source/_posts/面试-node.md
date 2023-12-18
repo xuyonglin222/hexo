@@ -9,30 +9,33 @@
 **答**：根据 ["npm install --save" No Longer Using Tildes](http://fredkschott.com/post/2014/02/npm-no-longer-defaults-to-tildes/) 一文可知，形如波浪号的编号（例如：~1.2.3）会匹配对应软件所有的 1.2.x 版本，并最终使用最新的符合要求的版本；相比之下倒 V 型编号（例如：^1.2.3）有更松弛的规则，所有 1.x.x 版本均在匹配列表中，但匹配过程会在 2.0.0 停止并返回最新的符合要求的版本。
 
 #### import和require的区别
-+ require/exports 是运行时动态加载，import/export 是静态编译
+ESM（ECMAScript Modules）模块和CommonJS模块的主要区别在于以下几点：
 
-    CommonJS 加载的是一个对象（即 module.exports 属性），该对象只有在脚本运行完才会生成。而 ES6 模块不是对象，它的对外接口只是一种静态定义，在代码静态解析阶段就会生成
+1. **语法**：
+   - ESM使用`import`和`export`语法来导入和导出模块。
+   - CommonJS使用`require`和`module.exports`语法来导入和导出模块。
 
-+  require/exports 输出的是一个值的拷贝，一旦输出一个值，模块内部的变化就影响不到这个值，import/export 模块输出的是值的引用，若文件引用的模块值改变，require 引入的模块值不会改变，而 import 引入的模块值会改变。
+2. **加载方式**：
+   - ESM是静态加载的，模块的依赖关系在代码执行前就需要确定，不能在运行时动态导入模块。
+   - CommonJS是动态加载的，模块的依赖关系可以在运行时动态确定，允许动态导入模块。
 
-+ 用法不同
+3. **浏览器兼容性**：
+   - ESM主要用于浏览器端的模块导入，需要在支持ESM的浏览器中使用。
+   - CommonJS主要用于Node.js等环境，不适用于浏览器端，因为它是同步加载的，会阻塞页面渲染。
 
-    exports 是对 module.exports 的引用，相当exports = module.exports = {};
-    
-    在不改变 exports 指向的情况下，使用 exports 和 module.exports 没有区别；如果将 exports 指向了其他对象，exports 改变不会改变模块输出值。
-    ````
-    //utils.js
-    let a = 100;
+4. **静态/动态**：
+   - ESM是静态的，模块的依赖关系在代码执行前就需要确定，不能在运行时动态导入模块。
+   - CommonJS是动态的，模块的依赖关系可以在运行时动态确定，允许动态导入模块。
 
-    exports.a = 200;
-    console.log(module.exports) //{a : 200}
-    exports = {a:300}; //exports 指向其他内存区
-
-    //test.js
-
-    var a = require('./utils');
-    console.log(a) // 打印为 {a : 200}
-    ````
-
+总的来说，ESM和CommonJS是两种不同的模块系统，各自适用于不同的环境和需求。在选择模块系统时，需要根据具体的项目需求和环境来进行选择。
 #### 解决循环引用
 
+当涉及循环依赖时，ESM（ECMAScript Modules）和CJS（CommonJS）在处理方式上存在一些差异。
+
+**ESM（ECMAScript Modules）**:
+在ESM中，循环依赖会导致模块返回未定义的值。例如，假设有两个模块A和B，它们相互依赖。当模块A尝试导入模块B时，由于B还未完全加载，A将会收到一个未定义的值。这可能会导致意外的行为，因此在ESM中需要谨慎处理循环依赖。
+
+**CJS（CommonJS）**:
+在CJS中，循环依赖是允许的，并且可以正常返回导出的值。当模块A和B相互依赖时，CJS会在需要时动态加载模块，因此可以正常处理循环依赖的情况。这使得在CJS中处理循环依赖相对更加灵活和简单。
+
+总的来说，ESM和CJS在处理循环依赖时存在一些差异，开发人员需要根据具体的模块系统选择合适的处理方式，并且需要注意循环依赖可能带来的潜在问题。
